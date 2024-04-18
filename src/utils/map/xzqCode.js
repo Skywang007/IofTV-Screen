@@ -64,6 +64,36 @@ export default {
         "level": "province",
         "name": "广东省"
     },
+    "茂名市": {
+        "adcode": "440900",
+        "level": "city",
+        "name": "茂名市"
+    },
+    "化州市": {
+        "adcode": "440982",
+        "level": "province",
+        "name": "化州市"
+    },
+    "茂南区": {
+        "adcode": "440902",
+        "level": "province",
+        "name": "茂南区"
+    },
+    "电白区": {
+        "adcode": "440904",
+        "level": "province",
+        "name": "电白区"
+    },
+    "高州市": {
+        "adcode": "440981",
+        "level": "province",
+        "name": "高州市"
+    },
+    "信宜市": {
+        "adcode": "440983",
+        "level": "province",
+        "name": "信宜市"
+    },
     "内蒙古自治区": {
         "adcode": "150000",
         "level": "province",
