@@ -7,11 +7,11 @@
 -->
 <template>
   <div class="contents">
-    <div class="contetn_left">
-      <div class="pagetab">
+    <!-- <div class="contetn_left">
+      <div class="pagetab"> -->
         <!-- <div class="item">实时监测</div> -->
         
-      </div>
+      <!-- </div>
       <ItemWrap class="contetn_left-top contetn_lr-item" title="设备总览">
         <LeftTop/>
     
@@ -26,14 +26,14 @@
       >
         <LeftBottom />
       </ItemWrap>
-    </div>
+    </div> -->
     <div class="contetn_center">
       <CenterMap class="contetn_center_top" />
-      <ItemWrap class="contetn_center-bottom" title="安装计划">
+      <!-- <ItemWrap class="contetn_center-bottom" title="安装计划">
         <CenterBottom />
-      </ItemWrap>
+      </ItemWrap> -->
     </div>
-    <div class="contetn_right">
+    <!-- <div class="contetn_right">
       <ItemWrap
         class="contetn_left-bottom contetn_lr-item"
         title="报警次数"
@@ -53,7 +53,7 @@
       >
         <RightBottom />
       </ItemWrap>
-    </div>
+    </div> -->
   </div>
 </template>
 

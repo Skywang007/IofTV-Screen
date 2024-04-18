@@ -1,10 +1,3 @@
-<!--
- * @Author: daidai
- * @Date: 2022-03-01 11:17:39
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-29 15:50:18
- * @FilePath: \web-pc\src\pages\big-screen\view\indexs\center-map.vue
--->
 <template>
   <div class="centermap">
     <div class="maptitle">
@@ -29,6 +22,7 @@ import xzqCode from "../../utils/map/xzqCode";
 import { currentGET } from "api/modules";
 import * as echarts from "echarts";
 import { GETNOBASE } from "api";
+import { POST } from "@/api/api";
 export default {
   data() {
     return {
@@ -46,7 +40,7 @@ export default {
     this.getData("china");
   },
   methods: {
-    getData(code) {
+    async getData(code) {
       currentGET("big8", { regionCode: code }).then((res) => {
         console.log("设备分布", res);
         if (res.success) {
@@ -56,6 +50,7 @@ export default {
           this.$Message.warning(res.msg);
         }
       });
+      const { data } = await POST('/api/v1/queryCirculate',{})
     },
     /**
      * @description: 获取geojson
@@ -99,7 +94,7 @@ export default {
       this.init(name, mydata, newData);
     },
     init(name, data, data2) {
-      // console.log(data2);
+      console.log('init-->',name,data,data2);
       let top = 45;
       let zoom = 1.05;
       let option = {
@@ -221,61 +216,61 @@ export default {
               shadowBlur: 10,
             },
           },
-          {
-            data: data2,
-            type: "effectScatter",
-            coordinateSystem: "geo",
-            symbolSize: function (val) {
-              return 4;
-              // return val[2] / 50;
-            },
-            legendHoverLink: true,
-            showEffectOn: "render",
-            rippleEffect: {
-              // period: 4,
-              scale: 6,
-              color: "rgba(255,255,255, 1)",
-              brushType: "fill",
-            },
-            tooltip: {
-              show: true,
-              formatter: function (params) {
-                if (params.data) {
-                  return params.name + "：" + params.data["value"][2];
-                } else {
-                  return params.name;
-                }
-              },
-              backgroundColor: "rgba(0,0,0,.6)",
-              borderColor: "rgba(147, 235, 248, .8)",
-              textStyle: {
-                color: "#FFF",
-              },
-            },
-            label: {
-              formatter: (param) => {
-                return param.name.slice(0, 2);
-              },
+          // {
+          //   data: data2,
+          //   type: "effectScatter",
+          //   coordinateSystem: "geo",
+          //   symbolSize: function (val) {
+          //     return 4;
+          //     // return val[2] / 50;
+          //   },
+          //   legendHoverLink: true,
+          //   showEffectOn: "render",
+          //   rippleEffect: {
+          //     // period: 4,
+          //     scale: 6,
+          //     color: "rgba(255,255,255, 1)",
+          //     brushType: "fill",
+          //   },
+          //   tooltip: {
+          //     show: true,
+          //     formatter: function (params) {
+          //       if (params.data) {
+          //         return params.name + "：" + params.data["value"][2];
+          //       } else {
+          //         return params.name;
+          //       }
+          //     },
+          //     backgroundColor: "rgba(0,0,0,.6)",
+          //     borderColor: "rgba(147, 235, 248, .8)",
+          //     textStyle: {
+          //       color: "#FFF",
+          //     },
+          //   },
+          //   label: {
+          //     formatter: (param) => {
+          //       return param.name.slice(0, 2);
+          //     },
 
-              fontSize: 11,
-              offset: [0, 2],
-              position: "bottom",
-              textBorderColor: "#fff",
-              textShadowColor: "#000",
-              textShadowBlur: 10,
-              textBorderWidth: 0,
-              color: "#FFF",
-              show: true,
-            },
-            // colorBy: "data",
-            itemStyle: {
-              color: "rgba(255,255,255,1)",
-              borderColor: "rgba(2255,255,255,2)",
-              borderWidth: 4,
-              shadowColor: "#000",
-              shadowBlur: 10,
-            },
-          },
+          //     fontSize: 11,
+          //     offset: [0, 2],
+          //     position: "bottom",
+          //     textBorderColor: "#fff",
+          //     textShadowColor: "#000",
+          //     textShadowBlur: 10,
+          //     textBorderWidth: 0,
+          //     color: "#FFF",
+          //     show: true,
+          //   },
+          //   // colorBy: "data",
+          //   itemStyle: {
+          //     color: "rgba(255,255,255,1)",
+          //     borderColor: "rgba(2255,255,255,2)",
+          //     borderWidth: 4,
+          //     shadowColor: "#000",
+          //     shadowBlur: 10,
+          //   },
+          // },
         ],
          //动画效果
             // animationDuration: 1000,
