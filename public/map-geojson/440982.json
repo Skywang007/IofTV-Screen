@@ -818,7 +818,15 @@
         "name": "长岐镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "center": [
+          116.692234,
+          21.548738
+        ],
+        "centroid": [
+          116.69223,
+          21.54873
+        ]
       }
     },
     {
@@ -3126,7 +3134,11 @@
         "name": "杨梅镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -3750,7 +3762,11 @@
         "name": "下郭街道",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -6594,7 +6610,11 @@
         "name": "良光镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -8122,7 +8142,11 @@
         "name": "丽岗镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -11210,7 +11234,11 @@
         "name": "笪桥镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -13602,7 +13630,11 @@
         "name": "同庆镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -14686,7 +14718,11 @@
         "name": "石湾街道",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -15826,7 +15862,11 @@
         "name": "南盛街道",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -16798,7 +16838,11 @@
         "name": "河西街道",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -17626,7 +17670,11 @@
         "name": "官桥镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -23982,7 +24030,11 @@
         "name": "中垌镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -25998,7 +26050,11 @@
         "name": "江湖镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -29098,7 +29154,11 @@
         "name": "文楼镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -31998,7 +32058,11 @@
         "name": "平定镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -33230,7 +33294,11 @@
         "name": "宝圩镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -35006,7 +35074,11 @@
         "name": "播扬镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -37558,7 +37630,11 @@
         "name": "那务镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -39454,7 +39530,11 @@
         "name": "合江镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -40654,7 +40734,11 @@
         "name": "林尘镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -45482,7 +45566,11 @@
         "name": "新安镇",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -46206,7 +46294,11 @@
         "name": "东山街道",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     },
     {
@@ -47186,7 +47278,11 @@
         "name": "鉴江开发区",
         "fill-opacity": 0,
         "stroke-opacity": 1,
-        "stroke": "#ff0000"
+        "stroke": "#ff0000",
+        "centroid": [
+          116.692234,
+          21.548738
+        ]
       }
     }
   ]

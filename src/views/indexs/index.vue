@@ -118,6 +118,7 @@ export default {
 
   .contetn_center_top {
     width: 100%;
+    height: 100%;
   }
 
   // 中间

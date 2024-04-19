@@ -22,7 +22,7 @@ import xzqCode from "../../utils/map/xzqCode";
 import { currentGET } from "api/modules";
 import * as echarts from "echarts";
 import { GETNOBASE } from "api";
-import { POST } from "@/api/api";
+import { POST, GET } from "@/api/api";
 export default {
   data() {
     return {
@@ -37,20 +37,22 @@ export default {
 
   mounted() {
     // console.log(xzqCode);
-    this.getData("china");
+    // this.getData("china");
+    this.getData("440982");
   },
   methods: {
     async getData(code) {
-      currentGET("big8", { regionCode: code }).then((res) => {
+      currentGET("big8", { regionCode: code }).then(async (res) => {
+        const { data } = await GET("/api/v1/querySpace", {});
         console.log("设备分布", res);
         if (res.success) {
-          this.getGeojson(res.data.regionCode, res.data.dataList);
+          // this.getGeojson(res.data.regionCode, res.data.dataList);
+          this.getGeojson(res.data.regionCode, data);
           this.mapclick();
         } else {
           this.$Message.warning(res.msg);
         }
       });
-      const { data } = await POST('/api/v1/queryCirculate',{})
     },
     /**
      * @description: 获取geojson
@@ -61,7 +63,7 @@ export default {
     async getGeojson(name, mydata) {
       this.code = name;
       //如果要展示南海群岛并且展示的是中国的话
-      let geoname=name
+      let geoname = name;
       if (this.isSouthChinaSea && name == "china") {
         geoname = "chinaNanhai";
       }
@@ -70,9 +72,11 @@ export default {
       if (mapjson) {
         mapjson = mapjson.geoJSON;
       } else {
-        mapjson = await GETNOBASE(`./map-geojson/${geoname}.json`).then((res) => {
-          return res;
-        });
+        mapjson = await GETNOBASE(`./map-geojson/${geoname}.json`).then(
+          (res) => {
+            return res;
+          }
+        );
         echarts.registerMap(name, mapjson);
       }
       let cityCenter = {};
@@ -83,6 +87,7 @@ export default {
           item.properties.centroid || item.properties.center;
       });
       let newData = [];
+      console.log("cityCenter", cityCenter);
       mydata.map((item) => {
         if (cityCenter[item.name]) {
           newData.push({
@@ -94,9 +99,15 @@ export default {
       this.init(name, mydata, newData);
     },
     init(name, data, data2) {
-      console.log('init-->',name,data,data2);
+      console.log("init-->", name, data, data2);
       let top = 45;
       let zoom = 1.05;
+      const demo = [
+        {
+          name: "长岐镇",
+          value: [110.624771, 21.679763, 4738],
+        },
+      ];
       let option = {
         backgroundColor: "rgba(0,0,0,0)",
         tooltip: {
@@ -216,66 +227,66 @@ export default {
               shadowBlur: 10,
             },
           },
-          // {
-          //   data: data2,
-          //   type: "effectScatter",
-          //   coordinateSystem: "geo",
-          //   symbolSize: function (val) {
-          //     return 4;
-          //     // return val[2] / 50;
-          //   },
-          //   legendHoverLink: true,
-          //   showEffectOn: "render",
-          //   rippleEffect: {
-          //     // period: 4,
-          //     scale: 6,
-          //     color: "rgba(255,255,255, 1)",
-          //     brushType: "fill",
-          //   },
-          //   tooltip: {
-          //     show: true,
-          //     formatter: function (params) {
-          //       if (params.data) {
-          //         return params.name + "：" + params.data["value"][2];
-          //       } else {
-          //         return params.name;
-          //       }
-          //     },
-          //     backgroundColor: "rgba(0,0,0,.6)",
-          //     borderColor: "rgba(147, 235, 248, .8)",
-          //     textStyle: {
-          //       color: "#FFF",
-          //     },
-          //   },
-          //   label: {
-          //     formatter: (param) => {
-          //       return param.name.slice(0, 2);
-          //     },
+          {
+            data: demo,
+            type: "effectScatter",
+            coordinateSystem: "geo",
+            symbolSize: function (val) {
+              return 4;
+              // return val[2] / 50;
+            },
+            legendHoverLink: true,
+            showEffectOn: "render",
+            rippleEffect: {
+              // period: 4,
+              scale: 6,
+              color: "rgba(255,255,255, 1)",
+              brushType: "fill",
+            },
+            tooltip: {
+              show: true,
+              formatter: function (params) {
+                if (params.data) {
+                  return params.name + "：" + params.data["value"][2];
+                } else {
+                  return params.name;
+                }
+              },
+              backgroundColor: "rgba(0,0,0,.6)",
+              borderColor: "rgba(147, 235, 248, .8)",
+              textStyle: {
+                color: "#FFF",
+              },
+            },
+            label: {
+              formatter: (param) => {
+                return param.name.slice(0, 2);
+              },
 
-          //     fontSize: 11,
-          //     offset: [0, 2],
-          //     position: "bottom",
-          //     textBorderColor: "#fff",
-          //     textShadowColor: "#000",
-          //     textShadowBlur: 10,
-          //     textBorderWidth: 0,
-          //     color: "#FFF",
-          //     show: true,
-          //   },
-          //   // colorBy: "data",
-          //   itemStyle: {
-          //     color: "rgba(255,255,255,1)",
-          //     borderColor: "rgba(2255,255,255,2)",
-          //     borderWidth: 4,
-          //     shadowColor: "#000",
-          //     shadowBlur: 10,
-          //   },
-          // },
+              fontSize: 11,
+              offset: [0, 2],
+              position: "bottom",
+              textBorderColor: "#fff",
+              textShadowColor: "#000",
+              textShadowBlur: 10,
+              textBorderWidth: 0,
+              color: "#FFF",
+              show: true,
+            },
+            // colorBy: "data",
+            itemStyle: {
+              color: "rgba(255,255,255,1)",
+              borderColor: "rgba(2255,255,255,2)",
+              borderWidth: 4,
+              shadowColor: "#000",
+              shadowBlur: 10,
+            },
+          },
         ],
-         //动画效果
-            // animationDuration: 1000,
-            // animationEasing: 'linear',
-            // animationDurationUpdate: 1000
+        //动画效果
+        // animationDuration: 1000,
+        // animationEasing: 'linear',
+        // animationDurationUpdate: 1000
       };
       this.options = option;
     },
@@ -346,7 +357,7 @@ export default {
   }
 
   .mapwrap {
-    height: 548px;
+    height: 748px;
     width: 100%;
     // padding: 0 0 10px 0;
     box-sizing: border-box;
