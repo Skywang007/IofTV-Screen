@@ -10,7 +10,7 @@ function resolve(dir) {
 }
 
 module.exports = {
-  publicPath: './',
+  publicPath: '/',
   outputDir: process.env.VUE_APP_outputDir || 'dist',
   assetsDir: 'static',
   filenameHashing: true,
@@ -110,6 +110,9 @@ module.exports = {
         }
       }
     };
+    config.externals={
+      'BMap':'BMap'
+    }
   },
   // 是否为 Babel 或 TypeScript 使用 thread-loader。该选项在系统的 CPU 有多于一个内核时自动启用，仅作用于生产构建。
   parallel: require('os').cpus().length > 1,

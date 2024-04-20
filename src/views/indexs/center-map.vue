@@ -24,7 +24,7 @@ import * as echarts from "echarts";
 import { GETNOBASE } from "api";
 import { POST, GET } from "@/api/api";
 export default {
-  data() {
+  data () {
     return {
       maptitle: "设备分布图",
       options: {},
@@ -33,15 +33,15 @@ export default {
       isSouthChinaSea: false, //是否要展示南海群岛  修改此值请刷新页面
     };
   },
-  created() {},
+  created () { },
 
-  mounted() {
+  mounted () {
     // console.log(xzqCode);
     // this.getData("china");
     this.getData("440982");
   },
   methods: {
-    async getData(code) {
+    async getData (code) {
       currentGET("big8", { regionCode: code }).then(async (res) => {
         const { data } = await GET("/api/v1/querySpace", {});
         console.log("设备分布", res);
@@ -60,7 +60,7 @@ export default {
      * @param {*} mydata 接口返回列表数据
      * @return {*}
      */
-    async getGeojson(name, mydata) {
+    async getGeojson (name, mydata) {
       this.code = name;
       //如果要展示南海群岛并且展示的是中国的话
       let geoname = name;
@@ -98,7 +98,7 @@ export default {
       });
       this.init(name, mydata, newData);
     },
-    init(name, data, data2) {
+    init (name, data, data2) {
       console.log("init-->", name, data, data2);
       let top = 45;
       let zoom = 1.05;
@@ -108,6 +108,33 @@ export default {
           value: [110.624771, 21.679763, 4738],
         },
       ];
+      const demo2 = [
+        {
+          "name": "那务镇",
+          "value": [
+            116.692234,
+            21.548738,
+            4738.450003020465
+          ]
+        },
+        {
+          "name": "东山街道",
+          "value": [
+            116.692234,
+            21.548738,
+            768.2600003443658
+          ]
+        },
+        {
+          "name": "石湾街道",
+          "value": [
+            116.692234,
+            21.548738,
+            1458.8700015842915
+          ]
+        },
+        
+      ]
       let option = {
         backgroundColor: "rgba(0,0,0,0)",
         tooltip: {
@@ -164,10 +191,10 @@ export default {
             geoIndex: 1,
             top: top,
             tooltip: {
-              show: true,
+              show: false,
               formatter: function (params) {
                 if (params.data) {
-                  return params.name + "：" + params.data["value"];
+                  return params.name + "：" + params.data["value"][2];
                 } else {
                   return params.name;
                 }
@@ -179,22 +206,24 @@ export default {
               },
             },
             label: {
-              show: false,
+              show: true,
               color: "#000",
               // position: [-10, 0],
               formatter: function (val) {
-                // console.log(val)
                 if (val.data !== undefined) {
-                  return val.name.slice(0, 2);
+                  return val.name.slice(0, 3);
                 } else {
                   return "";
                 }
               },
               rich: {},
+              textStyle: {
+                color: "#FFF",
+              },
             },
             emphasis: {
               label: {
-                show: false,
+                show: true,
               },
               itemStyle: {
                 areaColor: "#389BB7",
@@ -290,13 +319,13 @@ export default {
       };
       this.options = option;
     },
-    message(text) {
+    message (text) {
       this.$Message({
         text: text,
         type: "warning",
       });
     },
-    mapclick() {
+    mapclick () {
       if (this.echartBindClick) return;
       //单击切换到级地图，当mapCode有值,说明可以切换到下级地图
       this.$refs.CenterMap.chart.on("click", (params) => {
@@ -348,11 +377,11 @@ export default {
     }
 
     .zuo {
-      background: url("../../assets/img/xiezuo.png") no-repeat;
+      background: url('../../assets/img/xiezuo.png') no-repeat;
     }
 
     .you {
-      background: url("../../assets/img/xieyou.png") no-repeat;
+      background: url('../../assets/img/xieyou.png') no-repeat;
     }
   }
 

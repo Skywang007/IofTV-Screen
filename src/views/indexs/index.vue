@@ -1,59 +1,40 @@
-<!--
- * @Author: daidai
- * @Date: 2022-03-04 09:23:59
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-07 11:05:02
- * @FilePath: \web-pc\src\pages\big-screen\view\indexs\index.vue
--->
 <template>
   <div class="contents">
-    <!-- <div class="contetn_left">
-      <div class="pagetab"> -->
-        <!-- <div class="item">实时监测</div> -->
-        
-      <!-- </div>
+    <div class="contetn_left">
+      <div class="pagetab">
+        <div class="item">实时监测</div>
+
+      </div>
       <ItemWrap class="contetn_left-top contetn_lr-item" title="设备总览">
-        <LeftTop/>
-    
+        <LeftTop />
+
       </ItemWrap>
       <ItemWrap class="contetn_left-center contetn_lr-item" title="用户总览">
         <LeftCenter />
       </ItemWrap>
-      <ItemWrap
-        class="contetn_left-bottom contetn_lr-item"
-        title="设备提醒"
-        style="padding: 0 10px 16px 10px"
-      >
+      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="设备提醒" style="padding: 0 10px 16px 10px">
         <LeftBottom />
       </ItemWrap>
-    </div> -->
+    </div>
     <div class="contetn_center">
-      <CenterMap class="contetn_center_top" />
+      <Bmap class="contetn_center_top" />
+      <!-- <iframe src="assets/html/heatmap.html" ref="iframeDom" style="width: 100%;height: 100%;top: 10%;left: 0%;" /> --> -->
+      <!-- <CenterMap class="contetn_center_top" /> -->
       <!-- <ItemWrap class="contetn_center-bottom" title="安装计划">
         <CenterBottom />
       </ItemWrap> -->
     </div>
-    <!-- <div class="contetn_right">
-      <ItemWrap
-        class="contetn_left-bottom contetn_lr-item"
-        title="报警次数"
-      >
+    <div class="contetn_right">
+      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="报警次数">
         <RightTop />
       </ItemWrap>
-      <ItemWrap
-        class="contetn_left-bottom contetn_lr-item"
-        title="报警排名(TOP8)"
-        style="padding: 0 10px 16px 10px"
-      >
+      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="报警排名(TOP8)" style="padding: 0 10px 16px 10px">
         <RightCenter />
       </ItemWrap>
-      <ItemWrap
-        class="contetn_left-bottom contetn_lr-item"
-        title="数据统计图 "
-      >
+      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="数据统计图 ">
         <RightBottom />
       </ItemWrap>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -66,6 +47,7 @@ import CenterBottom from "./center-bottom.vue";
 import RightTop from "./right-top.vue";
 import RightCenter from "./right-center.vue";
 import RightBottom from "./right-bottom.vue";
+import Bmap from "./Bmap.vue";
 
 export default {
   components: {
@@ -77,23 +59,24 @@ export default {
     RightCenter,
     RightBottom,
     CenterBottom,
+    Bmap
   },
-  data() {
+  data () {
     return {
-    
+
     };
   },
   filters: {
-    numsFilter(msg) {
+    numsFilter (msg) {
       return msg || 0;
     },
   },
-  created() {
+  created () {
   },
 
-  mounted() {},
+  mounted () { },
   methods: {
-  
+
   },
 };
 </script>
@@ -139,24 +122,21 @@ export default {
     flex-direction: column;
     justify-content: space-around;
     position: relative;
-
-  
   }
 }
 
-
 @keyframes rotating {
-    0% {
-        -webkit-transform: rotate(0) scale(1);
-        transform: rotate(0) scale(1);
-    }
-    50% {
-        -webkit-transform: rotate(180deg) scale(1.1);
-        transform: rotate(180deg) scale(1.1);
-    }
-    100% {
-        -webkit-transform: rotate(360deg) scale(1);
-        transform: rotate(360deg) scale(1);
-    }
+  0% {
+    -webkit-transform: rotate(0) scale(1);
+    transform: rotate(0) scale(1);
+  }
+  50% {
+    -webkit-transform: rotate(180deg) scale(1.1);
+    transform: rotate(180deg) scale(1.1);
+  }
+  100% {
+    -webkit-transform: rotate(360deg) scale(1);
+    transform: rotate(360deg) scale(1);
+  }
 }
 </style>
