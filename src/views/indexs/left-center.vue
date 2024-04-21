@@ -1,10 +1,3 @@
-<!--
- * @Author: daidai
- * @Date: 2022-02-28 16:16:42
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-10-25 09:18:22
- * @FilePath: \web-pc\src\pages\big-screen\view\indexs\left-center.vue
--->
 <template>
   <Echart id="leftCenter" :options="options" class="left_center_inner" v-if="pageflag" ref="charts" />
   <Reacquire v-else @onclick="getData" style="line-height:200px">
@@ -14,9 +7,20 @@
 
 <script>
 import { currentGET } from 'api/modules'
+import { POST, GET } from "@/api/api";
 export default {
-  data() {
+  data () {
     return {
+      pieData: {
+        total: 0,
+        Orthohair: 0,
+        OrthohairOrange: 0,
+        Parahairs: 0,
+        YellowDragon: 0,
+        MoneyBelly: 0,
+        DenseLeaves: 0,
+        FalseWestern: 0,
+      },
       options: {},
       countUserNumData: {
         lockNum: 0,
@@ -28,48 +32,62 @@ export default {
       timer: null
     };
   },
-  created() {
+  created () {
     this.getData()
   },
-  mounted() {
+  mounted () {
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.clearData()
 
   },
   methods: {
-    clearData() {
+    clearData () {
       if (this.timer) {
         clearInterval(this.timer)
         this.timer = null
       }
     },
-    getData() {
+    async getData () {
       this.pageflag = true
       // this.pageflag =false
-
-      currentGET('big1').then(res => {
-        //只打印一次
-        if (!this.timer) {
-          console.log("设备总览", res);
-        }
-        if (res.success) {
-          this.countUserNumData = res.data
-          this.$nextTick(() => {
+      const { data, state } = await GET("/api/v1/getBreed", {})
+      console.log('initdata', data);
+      if (state == 200) {
+        this.pieData = data[0]
+        this.$nextTick(() => {
             this.init()
           })
+      } else {
+        this.pageflag = false
+        this.$Message({
+          text: res.msg,
+          type: 'warning'
+        })
+      }
 
-        } else {
-          this.pageflag = false
-          this.$Message({
-            text: res.msg,
-            type: 'warning'
-          })
-        }
-      })
+      // currentGET('big1').then(res => {
+      //   //只打印一次
+      //   if (!this.timer) {
+      //     console.log("设备总览", res);
+      //   }
+      //   if (res.success) {
+      //     this.countUserNumData = res.data
+      //     this.$nextTick(() => {
+      //       this.init()
+      //     })
+
+      //   } else {
+      //     this.pageflag = false
+      //     this.$Message({
+      //       text: res.msg,
+      //       type: 'warning'
+      //     })
+      //   }
+      // })
     },
     //轮询
-    switper() {
+    switper () {
       if (this.timer) {
         return
       }
@@ -85,11 +103,11 @@ export default {
         this.timer = setInterval(looper, this.$store.state.setting.echartsAutoTime);
       });
     },
-    init() {
-      let total = this.countUserNumData.totalNum;
-      let colors = ["#ECA444", "#33A1DB", "#56B557"];
+    init () {
+      let total = this.pieData.total;
+      let colors = ["#ECA444", "#33A1DB", "#56B557",'4FADEE','#F6B273',"#78D96A",'red'];
       let piedata = {
-        name: "用户总览",
+        name: "种植品种规模分析",
         type: "pie",
         radius: ["42%", "65%"],
         avoidLabelOverlap: false,
@@ -101,32 +119,53 @@ export default {
 
         color: colors,
         data: [
-          // {
-          //   value: 0,
-          //   name: "告警",
-          //   label: {
-          //     shadowColor: colors[0],
-          //   },
-          // },
           {
-            value: this.countUserNumData.lockNum,
-            name: "锁定",
+            value: this.pieData.Orthohair,
+            name: "正毛",
             label: {
               shadowColor: colors[0],
             },
           },
           {
-            value: this.countUserNumData.onlineNum,
-            name: "在线",
+            value: this.pieData.Parahairs,
+            name: "副毛",
             label: {
               shadowColor: colors[2],
             },
           },
           {
-            value: this.countUserNumData.offlineNum,
-            name: "离线",
+            value: this.pieData.OrthohairOrange,
+            name: "正毛橘红",
             label: {
               shadowColor: colors[1],
+            },
+          },
+          {
+            value: this.pieData.YellowDragon,
+            name: "黄龙",
+            label: {
+              shadowColor: colors[3],
+            },
+          },
+          {
+            value: this.pieData.MoneyBelly,
+            name: "金钱肚",
+            label: {
+              shadowColor: colors[4],
+            },
+          },
+          {
+            value: this.pieData.DenseLeaves,
+            name: "密叶",
+            label: {
+              shadowColor: colors[5],
+            },
+          },
+          {
+            value: this.pieData.FalseWestern,
+            name: "假西洋",
+            label: {
+              shadowColor: colors[6],
             },
           },
 
@@ -195,11 +234,11 @@ export default {
               length: 20, // 第一段线 长度
               length2: 36, // 第二段线 长度
               show: true,
-            
+
             },
-              emphasis: {
-                show: true,
-              },
+            emphasis: {
+              show: true,
+            },
           },
           {
             ...piedata,

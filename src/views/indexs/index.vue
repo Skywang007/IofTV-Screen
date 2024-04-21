@@ -9,10 +9,10 @@
         <LeftTop />
 
       </ItemWrap>
-      <ItemWrap class="contetn_left-center contetn_lr-item" title="用户总览">
+      <ItemWrap class="contetn_left-center contetn_lr-item" title="种植品种规模分析">
         <LeftCenter />
       </ItemWrap>
-      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="设备提醒" style="padding: 0 10px 16px 10px">
+      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="产业发展历史" style="padding: 0 10px 16px 10px">
         <LeftBottom />
       </ItemWrap>
     </div>
@@ -25,13 +25,13 @@
       </ItemWrap> -->
     </div>
     <div class="contetn_right">
-      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="报警次数">
+      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="种植土壤详情">
         <RightTop />
       </ItemWrap>
-      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="报警排名(TOP8)" style="padding: 0 10px 16px 10px">
+      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="全市种植面积统计分析" style="padding: 0 10px 16px 10px">
         <RightCenter />
       </ItemWrap>
-      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="数据统计图 ">
+      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="全市种植产能统计分析 ">
         <RightBottom />
       </ItemWrap>
     </div>

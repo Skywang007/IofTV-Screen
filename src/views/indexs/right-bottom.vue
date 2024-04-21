@@ -1,194 +1,236 @@
-<!--
- * @Author: daidai
- * @Date: 2022-03-01 15:27:58
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-05-07 11:24:14
- * @FilePath: \web-pc\src\pages\big-screen\view\indexs\right-center.vue
--->
 <template>
-  <div v-if="pageflag" class="right_center_wrap beautify-scroll-def" :class="{ 'overflow-y-auto': !sbtxSwiperFlag }">
-    <component :is="components" :data="list" :class-option="defaultOption">
-      <ul class="right_center ">
-        <li class="right_center_item" v-for="(item, i) in list" :key="i">
-          <span class="orderNum">{{ i + 1 }}</span>
-          <div class="inner_right">
-            <div class="dibu"></div>
-            <div class="flex">
-              <div class="info">
-                <span class="labels ">设备ID：</span>
-                <span class="contents zhuyao"> {{ item.gatewayno }}</span>
-              </div>
-              <div class="info">
-                <span class="labels">型号：</span>
-                <span class="contents "> {{ item.terminalno }}</span>
-              </div>
-              <div class="info">
-                <span class="labels">告警值：</span>
-                <span class="contents warning"> {{ item.alertvalue | montionFilter }}</span>
-              </div>
-            </div>
-
-
-            <div class="flex">
-
-              <div class="info">
-                <span class="labels"> 地址：</span>
-                <span class="contents ciyao" style="font-size:12px"> {{ item.provinceName }}/{{ item.cityName }}/{{ item.countyName }}</span>
-              </div>
-              <div class="info time">
-                <span class="labels">时间：</span>
-                <span class="contents" style="font-size:12px"> {{ item.createtime }}</span>
-              </div>
-
-            </div>
-            <div class="flex">
-
-              <div class="info">
-                <span class="labels">报警内容：</span>
-                <span class="contents ciyao" :class="{ warning: item.alertdetail }"> {{ item.alertdetail || '无'
-                }}</span>
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </component>
-  </div>
-  <Reacquire v-else @onclick="getData" style="line-height:200px" />
-
+  <Echart id="rightTop" :options="option" class="right_top_inner" v-if="pageflag" ref="charts" />
+  <Reacquire v-else @onclick="getData" style="line-height: 200px">
+    重新获取
+  </Reacquire>
 </template>
 
 <script>
-import { currentGET } from 'api/modules'
-import vueSeamlessScroll from 'vue-seamless-scroll'  // vue2引入方式
-import Kong from '../../components/kong.vue'
+import { currentGET } from "api/modules";
+import { graphic } from "echarts"
+import { formatTime } from '@/utils/index'
+import { POST, GET } from "@/api/api";
 export default {
-  components: { vueSeamlessScroll, Kong },
-
-  data() {
+  data () {
     return {
-      list: [],
-      pageflag: true,
-      defaultOption: {
-        ...this.$store.state.setting.defaultOption,
-        limitMoveNum: 3, 
-        singleHeight: 250, 
-        step:0,
-      }
-
+      option: {},
+      pageflag: false,
+      timer: null,
     };
   },
-  computed: {
-    sbtxSwiperFlag() {
-      let ssyjSwiper = this.$store.state.setting.ssyjSwiper
-      if (ssyjSwiper) {
-        this.components = vueSeamlessScroll
-      } else {
-        this.components = Kong
-      }
-      return ssyjSwiper
-    }
-  },
-  created() {
-    this.getData()
+  created () {
+
   },
 
-  mounted() { },
+  mounted () {
+    this.getData();
+  },
+  beforeDestroy () {
+    this.clearData();
+  },
   methods: {
-    getData() {
-      this.pageflag = true
-      // this.pageflag =false
-      currentGET('big5', { limitNum: 50 }).then(res => {
-        console.log('实时预警', res);
-        if (res.success) {
-          this.list = res.data.list
-          let timer = setTimeout(() => {
-              clearTimeout(timer)
-              this.defaultOption.step=this.$store.state.setting.defaultOption.step
-          }, this.$store.state.setting.defaultOption.waitTime);
-        } else {
-          this.pageflag = false
-          this.$Message.warning(res.msg)
-        }
-      })
+    clearData () {
+      if (this.timer) {
+        clearInterval(this.timer);
+        this.timer = null;
+      }
     },
+    async getData () {
+      this.pageflag = true;
+      // this.pageflag =false
 
+      const { data, state } = await GET('/api/v1/getSciento', {})
+      currentGET("big4").then((res) => {
+        if (!this.timer) {
+          console.log("报警次数", res);
+        }
+        if (res.success) {
+          this.countUserNumData = res.data;
+          this.$nextTick(() => {
+            this.init(res.data.dateList, res.data.numList, res.data.numList2)
+            // this.switper();
+          });
+        } else {
+          this.pageflag = false;
+          this.$Message({
+            text: res.msg,
+            type: "warning",
+          });
+        }
+      });
+    },
+    //轮询
+    switper () {
+      if (this.timer) {
+        return;
+      }
+      let looper = (a) => {
+        this.getData();
+      };
+      this.timer = setInterval(
+        looper,
+        this.$store.state.setting.echartsAutoTime
+      );
+      let myChart = this.$refs.charts.chart;
+      myChart.on("mouseover", (params) => {
+        this.clearData();
+      });
+      myChart.on("mouseout", (params) => {
+        this.timer = setInterval(
+          looper,
+          this.$store.state.setting.echartsAutoTime
+        );
+      });
+    },
+    init (xData, yData, yData2) {
+      const xData2 = ['2时', '4时', '6时', '8时', '10时', '12时']
+      this.option = {
+        xAxis: {
+          type: "category",
+          data: xData2,
+          boundaryGap: true, // 不留白，从原点开始
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: "rgba(31,99,163,.2)",
+            },
+          },
+          axisLine: {
+            // show:false,
+            lineStyle: {
+              color: "rgba(31,99,163,.1)",
+            },
+          },
+          axisLabel: {
+            color: "#7EB7FD",
+            fontWeight: "500",
+          },
+        },
+        yAxis: {
+          name: "产能/吨",
+          type: "value",
+          nameTextStyle: {
+            color: "#7EB7FD",
+            fontWeight: "500",
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: "rgba(31,99,163,.2)",
+            },
+          },
+          axisLine: {
+            lineStyle: {
+              color: "rgba(31,99,163,.1)",
+            },
+          },
+          axisLabel: {
+            color: "#7EB7FD",
+            fontWeight: "500",
+          },
+        },
+        tooltip: {
+          trigger: "axis",
+          backgroundColor: "rgba(0,0,0,.6)",
+          borderColor: "rgba(147, 235, 248, .8)",
+          textStyle: {
+            color: "#FFF",
+          },
+        },
+        grid: {
+          //布局
+          show: true,
+          left: "10px",
+          right: "30px",
+          bottom: "10px",
+          top: "28px",
+          containLabel: true,
+          borderColor: "#1F63A3",
+        },
+        series: [
+          {
+            data: yData,
+            type: "bar",
+            smooth: true,
+            symbol: "none", //去除点
+            name: "报警1次数",
+            color: "rgba(252,144,16,.7)",
+            areaStyle: {
+              //右，下，左，上
+              color: new graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [
+                  {
+                    offset: 0,
+                    color: "rgba(252,144,16,.7)",
+                  },
+                  {
+                    offset: 1,
+                    color: "rgba(252,144,16,.0)",
+                  },
+                ],
+                false
+              ),
+            },
+            label: {
+              show: true,
+              position: 'top',
+              color: "rgba(252,144,16,.7)",
+              formatter: (params) => {
+                return `${params.value}吨`
+              }
+            }
+            // markPoint: {
+            //   data: [
+            //     {
+            //       name: "最大值",
+            //       type: "max",
+            //       valueDim: "y",
+            //       symbol: "rect",
+            //       symbolSize: [60, 26],
+            //       symbolOffset: [0, -20],
+            //       itemStyle: {
+            //         color: "rgba(0,0,0,0)",
+            //       },
+            //       label: {
+            //         color: "#FC9010",
+            //         backgroundColor: "rgba(252,144,16,0.1)",
+            //         borderRadius: 6,
+            //         padding: [7, 14],
+            //         borderWidth: 0.5,
+            //         borderColor: "rgba(252,144,16,.5)",
+            //         formatter: "报警1：{c}",
+            //       },
+            //     },
+            //     {
+            //       name: "最大值",
+            //       type: "max",
+            //       valueDim: "y",
+            //       symbol: "circle",
+            //       symbolSize: 6,
+            //       itemStyle: {
+            //         color: "#FC9010",
+            //         shadowColor: "#FC9010",
+            //         shadowBlur: 8,
+            //       },
+            //       label: {
+            //         formatter: "",
+            //       },
+            //     },
+            //   ],
+            // },
+          },
+        ],
+      };
+    },
   },
 };
 </script>
 <style lang='scss' scoped>
-.right_center {
-  width: 100%;
-  height: 100%;
-
-  .right_center_item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: auto;
-    padding: 10px;
-    font-size: 14px;
-    color: #fff;
-
-    .orderNum {
-      margin: 0 20px 0 -20px;
-    }
-
-
-    .inner_right {
-      position: relative;
-      height: 100%;
-      width: 400px;
-      flex-shrink: 0;
-      line-height: 1.5;
-
-      .dibu {
-        position: absolute;
-        height: 2px;
-        width: 104%;
-        background-image: url("../../assets/img/zuo_xuxian.png");
-        bottom: -12px;
-        left: -2%;
-        background-size: cover;
-      }
-    }
-
-    .info {
-      margin-right: 10px;
-      display: flex;
-      align-items: center;
-
-      .labels {
-        flex-shrink: 0;
-        font-size: 12px;
-        color: rgba(255, 255, 255, 0.6);
-      }
-
-      .zhuyao {
-        color: $primary-color;
-        font-size: 15px;
-      }
-
-      .ciyao {
-        color: rgba(255, 255, 255, 0.8);
-      }
-
-      .warning {
-        color: #E6A23C;
-        font-size: 15px;
-      }
-    }
-
-  }
-}
-
-.right_center_wrap {
-  overflow: hidden;
-  width: 100%;
-  height: 250px;
-}
-
-.overflow-y-auto {
-  overflow-y: auto;
+.right_top_inner {
+  margin-top: -8px;
 }
 </style>

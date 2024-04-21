@@ -1,18 +1,5 @@
-<!--
- * @Author: daidai
- * @Date: 2022-03-01 14:13:04
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-27 15:04:49
- * @FilePath: \web-pc\src\pages\big-screen\view\indexs\right-top.vue
--->
 <template>
-  <Echart
-    id="rightTop"
-    :options="option"
-    class="right_top_inner"
-    v-if="pageflag"
-    ref="charts"
-  />
+  <Echart id="rightTop" :options="option" class="right_top_inner" v-if="pageflag" ref="charts" />
   <Reacquire v-else @onclick="getData" style="line-height: 200px">
     重新获取
   </Reacquire>
@@ -20,35 +7,39 @@
 
 <script>
 import { currentGET } from "api/modules";
-import {graphic} from "echarts"
+import { graphic } from "echarts"
+import { formatTime } from '@/utils/index'
+import { POST, GET } from "@/api/api";
 export default {
-  data() {
+  data () {
     return {
       option: {},
       pageflag: false,
       timer: null,
     };
   },
-  created() {
-   
+  created () {
+
   },
 
-  mounted() {
-     this.getData();
+  mounted () {
+    this.getData();
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.clearData();
   },
   methods: {
-    clearData() {
+    clearData () {
       if (this.timer) {
         clearInterval(this.timer);
         this.timer = null;
       }
     },
-    getData() {
+    async getData () {
       this.pageflag = true;
       // this.pageflag =false
+
+      const { data,state }= await GET('/api/v1/getSciento',{})
       currentGET("big4").then((res) => {
         if (!this.timer) {
           console.log("报警次数", res);
@@ -56,8 +47,8 @@ export default {
         if (res.success) {
           this.countUserNumData = res.data;
           this.$nextTick(() => {
-            this.init(res.data.dateList, res.data.numList, res.data.numList2),
-              this.switper();
+            this.init(res.data.dateList, res.data.numList, res.data.numList2)
+            // this.switper();
           });
         } else {
           this.pageflag = false;
@@ -69,7 +60,7 @@ export default {
       });
     },
     //轮询
-    switper() {
+    switper () {
       if (this.timer) {
         return;
       }
@@ -91,12 +82,13 @@ export default {
         );
       });
     },
-    init(xData, yData, yData2) {
+    init (xData, yData, yData2) {
+      const xData2 = ['2时','4时','6时','8时','10时','12时','14时','16时','18时','20时','22时','24时',]
       this.option = {
         xAxis: {
           type: "category",
-          data: xData,
-          boundaryGap: false, // 不留白，从原点开始
+          data: xData2,
+          boundaryGap: true, // 不留白，从原点开始
           splitLine: {
             show: true,
             lineStyle: {
@@ -114,24 +106,45 @@ export default {
             fontWeight: "500",
           },
         },
-        yAxis: {
-          type: "value",
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: "rgba(31,99,163,.2)",
+        yAxis: [
+          {
+            name: "温度",
+            type: "value",
+            nameTextStyle: {
+              color: "#7EB7FD",
+              fontWeight: "500",
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: "rgba(31,99,163,.2)",
+              },
+            },
+            axisLine: {
+              lineStyle: {
+                color: "rgba(31,99,163,.1)",
+              },
+            },
+            axisLabel: {
+              color: "#7EB7FD",
+              fontWeight: "500",
+              formatter: '{value} °C'
             },
           },
-          axisLine: {
-            lineStyle: {
-              color: "rgba(31,99,163,.1)",
+          {
+            name: '含水量',
+            nameTextStyle: {
+              color: "#7EB7FD",
+              fontWeight: "500",
+            },
+            type: "value",
+            axisLabel: {
+              color: "#7EB7FD",
+              fontWeight: "500",
+              formatter: '{value} °%'
             },
           },
-          axisLabel: {
-            color: "#7EB7FD",
-            fontWeight: "500",
-          },
-        },
+        ],
         tooltip: {
           trigger: "axis",
           backgroundColor: "rgba(0,0,0,.6)",
@@ -159,132 +172,133 @@ export default {
             name: "报警1次数",
             color: "rgba(252,144,16,.7)",
             areaStyle: {
-                //右，下，左，上
-                color: new graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [
-                    {
-                      offset: 0,
-                      color: "rgba(252,144,16,.7)",
-                    },
-                    {
-                      offset: 1,
-                      color: "rgba(252,144,16,.0)",
-                    },
-                  ],
-                  false
-                ),
+              //右，下，左，上
+              color: new graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [
+                  {
+                    offset: 0,
+                    color: "rgba(252,144,16,.7)",
+                  },
+                  {
+                    offset: 1,
+                    color: "rgba(252,144,16,.0)",
+                  },
+                ],
+                false
+              ),
             },
-            markPoint: {
-              data: [
-                {
-                  name: "最大值",
-                  type: "max",
-                  valueDim: "y",
-                  symbol: "rect",
-                  symbolSize: [60, 26],
-                  symbolOffset: [0, -20],
-                  itemStyle: {
-                    color: "rgba(0,0,0,0)",
-                  },
-                  label: {
-                    color: "#FC9010",
-                    backgroundColor: "rgba(252,144,16,0.1)",
-                    borderRadius: 6,
-                    padding: [7, 14],
-                    borderWidth: 0.5,
-                    borderColor: "rgba(252,144,16,.5)",
-                    formatter: "报警1：{c}",
-                  },
-                },
-                {
-                  name: "最大值",
-                  type: "max",
-                  valueDim: "y",
-                  symbol: "circle",
-                  symbolSize: 6,
-                  itemStyle: {
-                    color: "#FC9010",
-                    shadowColor: "#FC9010",
-                    shadowBlur: 8,
-                  },
-                  label: {
-                    formatter: "",
-                  },
-                },
-              ],
-            },
+            // markPoint: {
+            //   data: [
+            //     {
+            //       name: "最大值",
+            //       type: "max",
+            //       valueDim: "y",
+            //       symbol: "rect",
+            //       symbolSize: [60, 26],
+            //       symbolOffset: [0, -20],
+            //       itemStyle: {
+            //         color: "rgba(0,0,0,0)",
+            //       },
+            //       label: {
+            //         color: "#FC9010",
+            //         backgroundColor: "rgba(252,144,16,0.1)",
+            //         borderRadius: 6,
+            //         padding: [7, 14],
+            //         borderWidth: 0.5,
+            //         borderColor: "rgba(252,144,16,.5)",
+            //         formatter: "报警1：{c}",
+            //       },
+            //     },
+            //     {
+            //       name: "最大值",
+            //       type: "max",
+            //       valueDim: "y",
+            //       symbol: "circle",
+            //       symbolSize: 6,
+            //       itemStyle: {
+            //         color: "#FC9010",
+            //         shadowColor: "#FC9010",
+            //         shadowBlur: 8,
+            //       },
+            //       label: {
+            //         formatter: "",
+            //       },
+            //     },
+            //   ],
+            // },
           },
           {
             data: yData2,
-            type: "line",
+            type: "bar",
+            yAxisIndex:1,
             smooth: true,
             symbol: "none", //去除点
-            name: "报警2次数",
+            name: "aaa",
             color: "rgba(9,202,243,.7)",
-            areaStyle: {
-                //右，下，左，上
-                color: new graphic.LinearGradient(
-                  0,
-                  0,
-                  0,
-                  1,
-                  [
-                    {
-                      offset: 0,
-                      color: "rgba(9,202,243,.7)",
-                    },
-                    {
-                      offset: 1,
-                      color: "rgba(9,202,243,.0)",
-                    },
-                  ],
-                  false
-                ),
-            },
-            markPoint: {
-              data: [
-                {
-                  name: "最大值",
-                  type: "max",
-                  valueDim: "y",
-                  symbol: "rect",
-                  symbolSize: [60, 26],
-                  symbolOffset: [0, -20],
-                  itemStyle: {
-                    color: "rgba(0,0,0,0)",
-                  },
-                  label: {
-                    color: "#09CAF3",
-                    backgroundColor: "rgba(9,202,243,0.1)",
+            // areaStyle: {
+            //   //右，下，左，上
+            //   color: new graphic.LinearGradient(
+            //     0,
+            //     0,
+            //     0,
+            //     1,
+            //     [
+            //       {
+            //         offset: 0,
+            //         color: "rgba(9,202,243,.7)",
+            //       },
+            //       {
+            //         offset: 1,
+            //         color: "rgba(9,202,243,.0)",
+            //       },
+            //     ],
+            //     false
+            //   ),
+            // },
+            // markPoint: {
+            //   data: [
+            //     {
+            //       name: "最大值",
+            //       type: "max",
+            //       valueDim: "y",
+            //       symbol: "rect",
+            //       symbolSize: [60, 26],
+            //       symbolOffset: [0, -20],
+            //       itemStyle: {
+            //         color: "rgba(0,0,0,0)",
+            //       },
+            //       label: {
+            //         color: "#09CAF3",
+            //         backgroundColor: "rgba(9,202,243,0.1)",
 
-                    borderRadius: 6,
-                    borderColor: "rgba(9,202,243,.5)",
-                    padding: [7, 14],
-                    formatter: "报警2：{c}",
-                    borderWidth: 0.5,
-                  },
-                },
-                {
-                  name: "最大值",
-                  type: "max",
-                  valueDim: "y",
-                  symbol: "circle",
-                  symbolSize: 6,
-                  itemStyle: {
-                    color: "#09CAF3",
-                    shadowColor: "#09CAF3",
-                    shadowBlur: 8,
-                  },
-                  label: {
-                    formatter: "",
-                  },
-                },
-              ],
-            },
+            //         borderRadius: 6,
+            //         borderColor: "rgba(9,202,243,.5)",
+            //         padding: [7, 14],
+            //         formatter: "报警2：{c}",
+            //         borderWidth: 0.5,
+            //       },
+            //     },
+            //     {
+            //       name: "最大值",
+            //       type: "max",
+            //       valueDim: "y",
+            //       symbol: "circle",
+            //       symbolSize: 6,
+            //       itemStyle: {
+            //         color: "#09CAF3",
+            //         shadowColor: "#09CAF3",
+            //         shadowBlur: 8,
+            //       },
+            //       label: {
+            //         formatter: "",
+            //       },
+            //     },
+            //   ],
+            // },
           },
         ],
       };

@@ -1,11 +1,3 @@
-/*
- * @Author: daidai
- * @Date: 2022-02-23 08:59:26
- * @LastEditors: daidai
- * @LastEditTime: 2022-02-24 17:11:58
- * @FilePath: \big-screen-vue-datav\src\utils\index.js
- */
-
 /**
  * @param {Function} fn 防抖函数
  * @param {Number} delay 延迟时间

@@ -1,163 +1,236 @@
-<!--
- * @Author: daidai
- * @Date: 2022-03-01 15:51:43
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-29 15:12:46
- * @FilePath: \web-pc\src\pages\big-screen\view\indexs\right-bottom.vue
--->
 <template>
-  <div class="right_bottom">
-    <dv-capsule-chart :config="config" style="width:100%;height:260px" />
-  </div>
+  <Echart id="rightTop" :options="option" class="right_top_inner" v-if="pageflag" ref="charts" />
+  <Reacquire v-else @onclick="getData" style="line-height: 200px">
+    重新获取
+  </Reacquire>
 </template>
 
 <script>
-import { currentGET } from 'api/modules'
+import { currentGET } from "api/modules";
+import { graphic } from "echarts"
+import { formatTime } from '@/utils/index'
+import { POST, GET } from "@/api/api";
 export default {
-  data() {
+  data () {
     return {
-      gatewayno: '',
-      config: {
-        showValue: true,
-        unit: "次",
-        data: []
-      },
-
+      option: {},
+      pageflag: false,
+      timer: null,
     };
   },
-  created() {
-    this.getData()
+  created () {
 
   },
-  computed: {
+
+  mounted () {
+    this.getData();
   },
-  mounted() { },
-  beforeDestroy() {
-    this.clearData()
+  beforeDestroy () {
+    this.clearData();
   },
   methods: {
-    clearData() {
+    clearData () {
       if (this.timer) {
-        clearInterval(this.timer)
-        this.timer = null
+        clearInterval(this.timer);
+        this.timer = null;
       }
     },
-    //轮询
-    switper() {
-      if (this.timer) {
-        return
-      }
-      let looper = (a) => {
-        this.getData()
-      };
-      this.timer = setInterval(looper, this.$store.state.setting.echartsAutoTime);
-    },
-    getData() {
-      this.pageflag = true
+    async getData () {
+      this.pageflag = true;
       // this.pageflag =false
-      currentGET('big7', { gatewayno: this.gatewayno }).then(res => {
 
+      const { data, state } = await GET('/api/v1/getSciento', {})
+      currentGET("big4").then((res) => {
         if (!this.timer) {
-          console.log('报警排名', res);
+          console.log("报警次数", res);
         }
         if (res.success) {
-          this.config = {
-            ...this.config,
-            data: res.data
-          }
-          this.switper()
+          this.countUserNumData = res.data;
+          this.$nextTick(() => {
+            this.init(res.data.dateList, res.data.numList, res.data.numList2)
+            // this.switper();
+          });
         } else {
-          this.pageflag = false
-          this.srcList = []
+          this.pageflag = false;
           this.$Message({
             text: res.msg,
-            type: 'warning'
-          })
+            type: "warning",
+          });
         }
-      })
+      });
+    },
+    //轮询
+    switper () {
+      if (this.timer) {
+        return;
+      }
+      let looper = (a) => {
+        this.getData();
+      };
+      this.timer = setInterval(
+        looper,
+        this.$store.state.setting.echartsAutoTime
+      );
+      let myChart = this.$refs.charts.chart;
+      myChart.on("mouseover", (params) => {
+        this.clearData();
+      });
+      myChart.on("mouseout", (params) => {
+        this.timer = setInterval(
+          looper,
+          this.$store.state.setting.echartsAutoTime
+        );
+      });
+    },
+    init (xData, yData, yData2) {
+      const xData2 = ['2时', '4时', '6时', '8时', '10时', '12时']
+      this.option = {
+        xAxis: {
+          type: "category",
+          data: xData2,
+          boundaryGap: true, // 不留白，从原点开始
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: "rgba(31,99,163,.2)",
+            },
+          },
+          axisLine: {
+            // show:false,
+            lineStyle: {
+              color: "rgba(31,99,163,.1)",
+            },
+          },
+          axisLabel: {
+            color: "#7EB7FD",
+            fontWeight: "500",
+          },
+        },
+        yAxis: {
+          name: "面积/亩",
+          type: "value",
+          nameTextStyle: {
+            color: "#7EB7FD",
+            fontWeight: "500",
+          },
+          splitLine: {
+            show: true,
+            lineStyle: {
+              color: "rgba(31,99,163,.2)",
+            },
+          },
+          axisLine: {
+            lineStyle: {
+              color: "rgba(31,99,163,.1)",
+            },
+          },
+          axisLabel: {
+            color: "#7EB7FD",
+            fontWeight: "500",
+          },
+        },
+        tooltip: {
+          trigger: "axis",
+          backgroundColor: "rgba(0,0,0,.6)",
+          borderColor: "rgba(147, 235, 248, .8)",
+          textStyle: {
+            color: "#FFF",
+          },
+        },
+        grid: {
+          //布局
+          show: true,
+          left: "10px",
+          right: "30px",
+          bottom: "10px",
+          top: "28px",
+          containLabel: true,
+          borderColor: "#1F63A3",
+        },
+        series: [
+          {
+            data: yData,
+            type: "bar",
+            smooth: true,
+            symbol: "none", //去除点
+            name: "报警1次数",
+            color: "rgba(252,144,16,.7)",
+            areaStyle: {
+              //右，下，左，上
+              color: new graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [
+                  {
+                    offset: 0,
+                    color: "rgba(252,144,16,.7)",
+                  },
+                  {
+                    offset: 1,
+                    color: "rgba(252,144,16,.0)",
+                  },
+                ],
+                false
+              ),
+            },
+            label: {
+              show: true,
+              position: 'top',
+              color: "rgba(252,144,16,.7)",
+              formatter: (params) => {
+                return `${params.value}亩`
+              }
+            }
+            // markPoint: {
+            //   data: [
+            //     {
+            //       name: "最大值",
+            //       type: "max",
+            //       valueDim: "y",
+            //       symbol: "rect",
+            //       symbolSize: [60, 26],
+            //       symbolOffset: [0, -20],
+            //       itemStyle: {
+            //         color: "rgba(0,0,0,0)",
+            //       },
+            //       label: {
+            //         color: "#FC9010",
+            //         backgroundColor: "rgba(252,144,16,0.1)",
+            //         borderRadius: 6,
+            //         padding: [7, 14],
+            //         borderWidth: 0.5,
+            //         borderColor: "rgba(252,144,16,.5)",
+            //         formatter: "报警1：{c}",
+            //       },
+            //     },
+            //     {
+            //       name: "最大值",
+            //       type: "max",
+            //       valueDim: "y",
+            //       symbol: "circle",
+            //       symbolSize: 6,
+            //       itemStyle: {
+            //         color: "#FC9010",
+            //         shadowColor: "#FC9010",
+            //         shadowBlur: 8,
+            //       },
+            //       label: {
+            //         formatter: "",
+            //       },
+            //     },
+            //   ],
+            // },
+          },
+        ],
+      };
     },
   },
 };
 </script>
 <style lang='scss' scoped>
-.list_Wrap {
-  height: 100%;
-  overflow: hidden;
-  :deep(.kong)   {
-    width: auto;
-  }
-}
-
-.sbtxSwiperclass {
-  .img_wrap {
-    overflow-x: auto;
-  }
-
-}
-
-.right_bottom {
-  box-sizing: border-box;
-  padding: 0 16px;
-
-  .searchform {
-    height: 80px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .searchform_item {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      label {
-        margin-right: 10px;
-        color: rgba(255, 255, 255, 0.8);
-      }
-
-      button {
-        margin-left: 30px;
-      }
-
-      input {}
-    }
-  }
-
-  .img_wrap {
-    display: flex;
-    // justify-content: space-around;
-    box-sizing: border-box;
-    padding: 0 0 20px;
-    // overflow-x: auto;
-
-    li {
-      width: 105px;
-      height: 137px;
-      border-radius: 6px;
-      overflow: hidden;
-      cursor: pointer;
-      // background: #84ccc9;
-      // border: 1px solid #ffffff;
-      overflow: hidden;
-      flex-shrink: 0;
-      margin: 0 10px;
-
-      img {
-        flex-shrink: 0;
-      }
-    }
-
-
-
-
-  }
-
-  .noData {
-    width: 100%;
-    line-height: 100px;
-    text-align: center;
-    color: rgb(129, 128, 128);
-
-  }
+.right_top_inner {
+  margin-top: -8px;
 }
 </style>

@@ -1,12 +1,12 @@
 <template>
   <div>
     <div id="map" style="height: 810px;"></div>
-		<div id="heatmap-buttons">
-        <button @click="()=>showHeatmap(1)">0 - 20 亩</button>
-        <button @click="()=>showHeatmap(2)">20 - 30 亩</button>
-        <button @click="()=>showHeatmap(3)">30 - 40 亩</button>
-        <button @click="()=>showHeatmap(4)">40 - 100 亩</button>
-        <button @click="()=>showHeatmap(5)">100以上</button>
+    <div id="heatmap-buttons">
+      <button @click="()=>showHeatmap(1)">0 - 20 亩</button>
+      <button @click="()=>showHeatmap(2)">20 - 30 亩</button>
+      <button @click="()=>showHeatmap(3)">30 - 40 亩</button>
+      <button @click="()=>showHeatmap(4)">40 - 100 亩</button>
+      <button @click="()=>showHeatmap(5)">100以上</button>
     </div>
     <!-- <div id="legend" class="legend" v-if="flag === 0">
       <div class="legend-item" v-for="item in data_legend" :key="item.name">
@@ -26,9 +26,9 @@ import { POST, GET } from "@/api/api";
 export default {
   data () {
     return {
-			mapData: [],
-			type: 1,
-			color: 'red',
+      mapData: [],
+      type: 5,
+      color: 'red',
       map: '',
       flag: 0,
     }
@@ -36,28 +36,29 @@ export default {
   created () {
     this.$nextTick(() => {
       this.initMap()
+      this.getBoundary()
     })
   },
   mounted () {
     // this.initMap()
   },
   methods: {
-		async initMap () {
-			const { data } = await GET("/api/v1/querySpace", { type:this.type });
-			data.forEach(item => {
-				item.name = `${item.name}-${item.space}亩`
-			})
-			this.mapData = data;
+    async initMap () {
+      const { data } = await GET("/api/v1/querySpace", { type: this.type });
+      data.forEach(item => {
+        item.name = `${item.name}-${item.space}亩`
+      })
+      this.mapData = data;
 
       this.map = new BMap.Map("map");
-      this.map.centerAndZoom(new BMap.Point(110.628092,21.647925), 11);
+      this.map.centerAndZoom(new BMap.Point(110.628092, 21.647925), 11);
       this.map.enableScrollWheelZoom();
 
-      
-			this.mapData.forEach((item) => {
-				
-				let lat = parseFloat(item.lat);
-				let lng = parseFloat(item.lng);
+
+      this.mapData.forEach((item) => {
+
+        let lat = parseFloat(item.lat);
+        let lng = parseFloat(item.lng);
         let point = new BMap.Point(lng, lat);
         // 创建标注样式
         const markerOptions = {
@@ -76,11 +77,10 @@ export default {
           border: "1px solid #ccc",
           padding: "5px"
         });
-				marker.setLabel(label);
-				
-				console.log(this.map.getPanes(), 'abc');
-				this.map.getPanes().markerMouseTarget.style.zIndex = 450;//修改图层z-index
-				this.map.getPanes().labelPane.style.zIndex = 1000;//修改图层z-index
+        marker.setLabel(label);
+
+        this.map.getPanes().markerMouseTarget.style.zIndex = 450;//修改图层z-index
+        this.map.getPanes().labelPane.style.zIndex = 1000;//修改图层z-index
         // 先隐藏标签
         label.hide();
         // 鼠标悬停时显示工厂名称
@@ -97,30 +97,61 @@ export default {
       })
 
     },
-		showHeatmap (index) {
-			this.type = index
-			switch (index) {
-				case 1:
-					this.color = 'red'
-					break;
-				case 2:
-					this.color = 'blue'
-					break;
-				case 3:
-					this.color = 'green'
-					break;
-				case 4:
-					this.color = 'yellow'
-					break;
-				case 5:
-					this.color = 'orange'
-					break;
-			
-				default:
-					break;
-			}
-			this.initMap()
-		}
+    getBoundary () {
+      var bdary = new BMap.Boundary();
+      bdary.get("广东省茂名市化州市", (rs) => {       //获取行政区域
+        // this.map.clearOverlays();        //清除地图覆盖物       
+        var count = rs.boundaries.length; //行政区域的点有多少个
+        if (count === 0) {
+          alert('未能获取当前输入行政区域');
+          return;
+        }
+        var EN_JW = "180, 90;";//东北角
+        var NW_JW = "-180,  90;";//西北角
+        var WS_JW = "-180, -90;";//西南角
+        var SE_JW = "180, -90;";//东南角
+        //添加环形遮罩层
+        var ply1 = new BMap.Polygon(rs.boundaries[0] + SE_JW + SE_JW + WS_JW + NW_JW + EN_JW + SE_JW, {
+          strokeColor: "none",
+          fillColor: "rgba(0,0,0,0.5)",
+          fillOpacity: 1,
+          strokeOpacity: 0.5
+        }); //建立多边形覆盖物
+        this.map.addOverlay(ply1);
+        var pointArray = [];
+        for (var i = 0; i < count; i++) {
+          var ply = new BMap.Polygon(rs.boundaries[i], { strokeWeight: 1, strokeColor: "#ff0000", fillColor: "" }); //建立多边形覆盖物
+          this.map.addOverlay(ply);  //添加覆盖物
+          pointArray = pointArray.concat(ply.getPath());
+        }
+        this.map.setViewport(pointArray);
+      });
+    },
+    showHeatmap (index) {
+      this.type = index
+      switch (index) {
+        case 1:
+          this.color = 'red'
+          break;
+        case 2:
+          this.color = 'blue'
+          break;
+        case 3:
+          this.color = 'green'
+          break;
+        case 4:
+          this.color = 'yellow'
+          break;
+        case 5:
+          this.color = 'orange'
+          break;
+
+        default:
+          break;
+      }
+      this.initMap()
+      this.getBoundary()
+    }
   },
 }
 </script>
