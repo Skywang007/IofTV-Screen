@@ -1,11 +1,5 @@
 <template>
-  <Echart
-    id="rightTop"
-    :options="option"
-    class="right_top_inner"
-    v-if="pageflag"
-    ref="charts"
-  />
+  <Echart id="rightTop" :options="option" class="right_top_inner" v-if="pageflag" ref="charts" />
   <Reacquire v-else @onclick="getData" style="line-height: 200px">
     重新获取
   </Reacquire>
@@ -17,31 +11,32 @@ import { graphic } from "echarts";
 import { formatTime } from "@/utils/index";
 import { POST, GET } from "@/api/api";
 export default {
-  data() {
+  data () {
     return {
       option: {},
       YData: [],
       XData: [],
       pageflag: false,
       timer: null,
+      colors: ["#FFC94A",'#C08B5C','#795458','#453F78','#1C1678','#4793AF'] // 为每个柱形指定一个颜色
     };
   },
-  created() {},
+  created () { },
 
-  mounted() {
+  mounted () {
     this.getData();
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.clearData();
   },
   methods: {
-    clearData() {
+    clearData () {
       if (this.timer) {
         clearInterval(this.timer);
         this.timer = null;
       }
     },
-    async getData() {
+    async getData () {
       this.pageflag = true;
       // this.pageflag =false
 
@@ -49,8 +44,22 @@ export default {
       this.XData = data.map((item) => {
         return item.county;
       });
+      let lastGeneratedIndex;
       this.YData = data.map((item) => {
-        return item.total;
+        let currentColorIndex;
+        do {
+          currentColorIndex = Math.floor(Math.random() * 6);
+        } while (currentColorIndex === lastGeneratedIndex);
+
+        lastGeneratedIndex = currentColorIndex;
+
+        const color = this.colors[currentColorIndex];
+        return {
+          value: item.total,
+          itemStyle: {
+            color: color,
+          },
+        };
       });
 
       currentGET("big4").then((res) => {
@@ -73,7 +82,7 @@ export default {
       });
     },
     //轮询
-    switper() {
+    switper () {
       if (this.timer) {
         return;
       }
@@ -95,7 +104,7 @@ export default {
         );
       });
     },
-    init(xData, yData, yData2) {
+    init (xData, yData, yData2) {
       this.option = {
         xAxis: {
           type: "category",
@@ -195,53 +204,15 @@ export default {
                 return `${params.value}亩`;
               },
             },
-            // markPoint: {
-            //   data: [
-            //     {
-            //       name: "最大值",
-            //       type: "max",
-            //       valueDim: "y",
-            //       symbol: "rect",
-            //       symbolSize: [60, 26],
-            //       symbolOffset: [0, -20],
-            //       itemStyle: {
-            //         color: "rgba(0,0,0,0)",
-            //       },
-            //       label: {
-            //         color: "#FC9010",
-            //         backgroundColor: "rgba(252,144,16,0.1)",
-            //         borderRadius: 6,
-            //         padding: [7, 14],
-            //         borderWidth: 0.5,
-            //         borderColor: "rgba(252,144,16,.5)",
-            //         formatter: "报警1：{c}",
-            //       },
-            //     },
-            //     {
-            //       name: "最大值",
-            //       type: "max",
-            //       valueDim: "y",
-            //       symbol: "circle",
-            //       symbolSize: 6,
-            //       itemStyle: {
-            //         color: "#FC9010",
-            //         shadowColor: "#FC9010",
-            //         shadowBlur: 8,
-            //       },
-            //       label: {
-            //         formatter: "",
-            //       },
-            //     },
-            //   ],
-            // },
+            
           },
         ],
         dataZoom: [
           {
             type: "slider",
             xAxisIndex: 0,
-            start: 0,
-            end: 20,
+            start: 20,
+            end: 40,
             show: true,
             // bottom:"-20px",
             // height: 10,

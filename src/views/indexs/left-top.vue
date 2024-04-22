@@ -1,36 +1,29 @@
-<!--
- * @Author: daidai
- * @Date: 2022-02-28 16:16:42
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-07-20 17:57:11
- * @FilePath: \web-pc\src\pages\big-screen\view\indexs\left-center.vue
--->
 <template>
     <ul class="user_Overview flex" v-if="pageflag">
         <li class="user_Overview-item" style="color: #00fdfa">
             <div class="user_Overview_nums allnum ">
                 <dv-digital-flop :config="config" style="width:100%;height:100%;" />
             </div>
-            <p>总设备数</p>
+            <p>年产鲜果</p>
         </li>
         <li class="user_Overview-item" style="color: #07f7a8">
             <div class="user_Overview_nums online">
                 <dv-digital-flop :config="onlineconfig" style="width:100%;height:100%;" />
             </div>
-            <p>在线数</p>
+            <p>加工总产值</p>
         </li>
         <li class="user_Overview-item" style="color: #e3b337">
             <div class="user_Overview_nums offline">
                 <dv-digital-flop :config="offlineconfig" style="width:100%;height:100%;" />
 
             </div>
-            <p>掉线数</p>
+            <p>全产业链产值</p>
         </li>
         <li class="user_Overview-item" style="color: #f5023d">
             <div class="user_Overview_nums laramnum">
                 <dv-digital-flop :config="laramnumconfig" style="width:100%;height:100%;" />
             </div>
-            <p>告警次数</p>
+            <p>带动产业人员</p>
         </li>
     </ul>
     <Reacquire v-else @onclick="getData" line-height="200px">
@@ -139,7 +132,7 @@ export default {
                         ...this.laramnumconfig,
                         number: [res.data.alarmNum]
                     }
-                    this.switper()
+                    // this.switper()
                 } else {
                     this.pageflag = false;
                     this.$Message.warning(res.msg);

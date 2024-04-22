@@ -24,6 +24,7 @@ export default {
       YData: [],
       pageflag: false,
       timer: null,
+      colors:['#874CCC','#135D66','#003C43','#FB6D48','#FF204E','#2D9596']
     };
   },
   created() {},
@@ -49,8 +50,22 @@ export default {
       this.XData = data.map((item) => {
         return item.county;
       });
+      let lastGeneratedIndex;
       this.YData = data.map((item) => {
-        return item.total;
+        let currentColorIndex;
+        do {
+          currentColorIndex = Math.floor(Math.random() * 6);
+        } while (currentColorIndex === lastGeneratedIndex);
+
+        lastGeneratedIndex = currentColorIndex;
+
+        const color = this.colors[currentColorIndex];
+        return {
+          value: item.total,
+          itemStyle: {
+            color: color,
+          },
+        };
       });
       currentGET("big4").then((res) => {
         if (!this.timer) {

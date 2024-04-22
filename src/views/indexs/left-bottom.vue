@@ -14,6 +14,8 @@ export default {
   data () {
     return {
       option: {},
+      year: [],
+      total: [],
       pageflag: false,
       timer: null,
     };
@@ -39,7 +41,13 @@ export default {
       this.pageflag = true;
       // this.pageflag =false
 
-      const { data, state } = await GET('/api/v1/getSciento', {})
+      const { data, state } = await GET('/api/v1/getHistory', {})
+      this.year = data.map((item) => {
+        return item.year;
+      });
+      this.total = data.map((item) => {
+        return item.total;
+      });
       currentGET("big4").then((res) => {
         if (!this.timer) {
           console.log("报警次数", res);
@@ -83,12 +91,11 @@ export default {
       });
     },
     init (xData, yData, yData2) {
-      const xData2 = ['2时', '4时', '6时', '8时', '10时', '12时']
       this.option = {
         xAxis: {
           type: "category",
-          data: xData2,
-          boundaryGap: true, // 不留白，从原点开始
+          data: this.year,
+          boundaryGap: false, // 不留白，从原点开始
           splitLine: {
             show: true,
             lineStyle: {
@@ -107,7 +114,7 @@ export default {
           },
         },
         yAxis: {
-          name: "种植面积/万亩",
+          name: "种植面积/亩",
           type: "value",
           nameTextStyle: {
             color: "#7EB7FD",
@@ -149,11 +156,11 @@ export default {
         },
         series: [
           {
-            data: yData,
+            data: this.total,
             type: "line",
             smooth: true,
             symbol: 'circle', //去除点
-            name: "报警1次数",
+            name: "种植面积/亩",
             color: "rgba(252,144,16,.7)",
             areaStyle: {
               //右，下，左，上

@@ -16,6 +16,7 @@ export default {
       option: {},
       pageflag: false,
       timer: null,
+      colors:['#874CCC','#135D66','#003C43','#FB6D48','#FF204E','#2D9596']
     };
   },
   created () {
@@ -191,45 +192,6 @@ export default {
                 false
               ),
             },
-            // markPoint: {
-            //   data: [
-            //     {
-            //       name: "最大值",
-            //       type: "max",
-            //       valueDim: "y",
-            //       symbol: "rect",
-            //       symbolSize: [60, 26],
-            //       symbolOffset: [0, -20],
-            //       itemStyle: {
-            //         color: "rgba(0,0,0,0)",
-            //       },
-            //       label: {
-            //         color: "#FC9010",
-            //         backgroundColor: "rgba(252,144,16,0.1)",
-            //         borderRadius: 6,
-            //         padding: [7, 14],
-            //         borderWidth: 0.5,
-            //         borderColor: "rgba(252,144,16,.5)",
-            //         formatter: "报警1：{c}",
-            //       },
-            //     },
-            //     {
-            //       name: "最大值",
-            //       type: "max",
-            //       valueDim: "y",
-            //       symbol: "circle",
-            //       symbolSize: 6,
-            //       itemStyle: {
-            //         color: "#FC9010",
-            //         shadowColor: "#FC9010",
-            //         shadowBlur: 8,
-            //       },
-            //       label: {
-            //         formatter: "",
-            //       },
-            //     },
-            //   ],
-            // },
           },
           {
             data: yData2,
@@ -239,66 +201,6 @@ export default {
             symbol: "none", //去除点
             name: "aaa",
             color: "rgba(9,202,243,.7)",
-            // areaStyle: {
-            //   //右，下，左，上
-            //   color: new graphic.LinearGradient(
-            //     0,
-            //     0,
-            //     0,
-            //     1,
-            //     [
-            //       {
-            //         offset: 0,
-            //         color: "rgba(9,202,243,.7)",
-            //       },
-            //       {
-            //         offset: 1,
-            //         color: "rgba(9,202,243,.0)",
-            //       },
-            //     ],
-            //     false
-            //   ),
-            // },
-            // markPoint: {
-            //   data: [
-            //     {
-            //       name: "最大值",
-            //       type: "max",
-            //       valueDim: "y",
-            //       symbol: "rect",
-            //       symbolSize: [60, 26],
-            //       symbolOffset: [0, -20],
-            //       itemStyle: {
-            //         color: "rgba(0,0,0,0)",
-            //       },
-            //       label: {
-            //         color: "#09CAF3",
-            //         backgroundColor: "rgba(9,202,243,0.1)",
-
-            //         borderRadius: 6,
-            //         borderColor: "rgba(9,202,243,.5)",
-            //         padding: [7, 14],
-            //         formatter: "报警2：{c}",
-            //         borderWidth: 0.5,
-            //       },
-            //     },
-            //     {
-            //       name: "最大值",
-            //       type: "max",
-            //       valueDim: "y",
-            //       symbol: "circle",
-            //       symbolSize: 6,
-            //       itemStyle: {
-            //         color: "#09CAF3",
-            //         shadowColor: "#09CAF3",
-            //         shadowBlur: 8,
-            //       },
-            //       label: {
-            //         formatter: "",
-            //       },
-            //     },
-            //   ],
-            // },
           },
         ],
       };
