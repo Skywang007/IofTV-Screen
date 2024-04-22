@@ -1,5 +1,11 @@
 <template>
-  <Echart id="rightTop" :options="option" class="right_top_inner" v-if="pageflag" ref="charts" />
+  <Echart
+    id="rightTop"
+    :options="option"
+    class="right_top_inner"
+    v-if="pageflag"
+    ref="charts"
+  />
   <Reacquire v-else @onclick="getData" style="line-height: 200px">
     重新获取
   </Reacquire>
@@ -7,39 +13,46 @@
 
 <script>
 import { currentGET } from "api/modules";
-import { graphic } from "echarts"
-import { formatTime } from '@/utils/index'
+import { graphic } from "echarts";
+import { formatTime } from "@/utils/index";
 import { POST, GET } from "@/api/api";
 export default {
-  data () {
+  data() {
     return {
       option: {},
+      YData: [],
+      XData: [],
       pageflag: false,
       timer: null,
     };
   },
-  created () {
+  created() {},
 
-  },
-
-  mounted () {
+  mounted() {
     this.getData();
   },
-  beforeDestroy () {
+  beforeDestroy() {
     this.clearData();
   },
   methods: {
-    clearData () {
+    clearData() {
       if (this.timer) {
         clearInterval(this.timer);
         this.timer = null;
       }
     },
-    async getData () {
+    async getData() {
       this.pageflag = true;
       // this.pageflag =false
 
-      const { data, state } = await GET('/api/v1/getSciento', {})
+      const { data, state } = await GET("/api/v1/getAcreageArea", {});
+      this.XData = data.map((item) => {
+        return item.county;
+      });
+      this.YData = data.map((item) => {
+        return item.total;
+      });
+
       currentGET("big4").then((res) => {
         if (!this.timer) {
           console.log("报警次数", res);
@@ -47,7 +60,7 @@ export default {
         if (res.success) {
           this.countUserNumData = res.data;
           this.$nextTick(() => {
-            this.init(res.data.dateList, res.data.numList, res.data.numList2)
+            this.init(res.data.dateList, res.data.numList, res.data.numList2);
             // this.switper();
           });
         } else {
@@ -60,7 +73,7 @@ export default {
       });
     },
     //轮询
-    switper () {
+    switper() {
       if (this.timer) {
         return;
       }
@@ -82,12 +95,11 @@ export default {
         );
       });
     },
-    init (xData, yData, yData2) {
-      const xData2 = ['2时', '4时', '6时', '8时', '10时', '12时']
+    init(xData, yData, yData2) {
       this.option = {
         xAxis: {
           type: "category",
-          data: xData2,
+          data: this.XData,
           boundaryGap: true, // 不留白，从原点开始
           splitLine: {
             show: true,
@@ -137,19 +149,19 @@ export default {
             color: "#FFF",
           },
         },
-        grid: {
-          //布局
-          show: true,
-          left: "10px",
-          right: "30px",
-          bottom: "10px",
-          top: "28px",
-          containLabel: true,
-          borderColor: "#1F63A3",
-        },
+        // grid: {
+        //   //布局
+        //   show: true,
+        //   left: "10px",
+        //   right: "30px",
+        //   bottom: "10px",
+        //   top: "28px",
+        //   containLabel: true,
+        //   borderColor: "#1F63A3",
+        // },
         series: [
           {
-            data: yData,
+            data: this.YData,
             type: "bar",
             smooth: true,
             symbol: "none", //去除点
@@ -177,12 +189,12 @@ export default {
             },
             label: {
               show: true,
-              position: 'top',
+              position: "top",
               color: "rgba(252,144,16,.7)",
               formatter: (params) => {
-                return `${params.value}亩`
-              }
-            }
+                return `${params.value}亩`;
+              },
+            },
             // markPoint: {
             //   data: [
             //     {
@@ -224,6 +236,31 @@ export default {
             // },
           },
         ],
+        dataZoom: [
+          {
+            type: "slider",
+            xAxisIndex: 0,
+            start: 0,
+            end: 20,
+            show: true,
+            // bottom:"-20px",
+            // height: 10,
+            // handleIcon:
+            //   "path://M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.4v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z",
+            // handleSize: "100%",
+            textStyle: {
+              color: "#7EB7FD",
+            },
+            borderColor: "#1F63A3",
+            backgroundColor: "rgba(31, 99, 163, 0.05)",
+            fillerColor: "rgba(31, 99, 163, 0.15)",
+            emphasis: {
+              handleStyle: {
+                color: "#FC9010",
+              },
+            },
+          },
+        ],
       };
     },
   },
@@ -232,5 +269,6 @@ export default {
 <style lang='scss' scoped>
 .right_top_inner {
   margin-top: -8px;
+  height: 100%;
 }
 </style>

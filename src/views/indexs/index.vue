@@ -96,7 +96,7 @@ export default {
 
   //左右两侧 三个块
   .contetn_lr-item {
-    height: 310px;
+    height: 330px;
   }
 
   .contetn_center_top {
@@ -119,6 +119,7 @@ export default {
   .contetn_left,
   .contetn_right {
     display: flex;
+    flex:1;
     flex-direction: column;
     justify-content: space-around;
     position: relative;
