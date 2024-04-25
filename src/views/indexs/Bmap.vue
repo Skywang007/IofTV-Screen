@@ -28,7 +28,7 @@ export default {
     return {
       mapData: [],
       type: 5,
-      color: 'red',
+      color: 'orange',
       map: '',
       flag: 0,
     }
