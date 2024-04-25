@@ -1,5 +1,11 @@
 <template>
-  <Echart id="rightTop" :options="option" class="right_top_inner" v-if="pageflag" ref="charts" />
+  <Echart
+    id="rightTop"
+    :options="option"
+    class="right_top_inner"
+    v-if="pageflag"
+    ref="charts"
+  />
   <Reacquire v-else @onclick="getData" style="line-height: 200px">
     重新获取
   </Reacquire>
@@ -7,47 +13,52 @@
 
 <script>
 import { currentGET } from "api/modules";
-import { graphic } from "echarts"
-import { formatTime } from '@/utils/index'
+import { graphic } from "echarts";
+import { formatTime } from "@/utils/index";
 import { POST, GET } from "@/api/api";
 export default {
-  data () {
+  data() {
     return {
       option: {},
       year: [],
       total: [],
+      total2: [],
       pageflag: false,
       timer: null,
     };
   },
-  created () {
+  created() {},
 
-  },
-
-  mounted () {
+  mounted() {
     this.getData();
   },
-  beforeDestroy () {
+  beforeDestroy() {
     this.clearData();
   },
   methods: {
-    clearData () {
+    clearData() {
       if (this.timer) {
         clearInterval(this.timer);
         this.timer = null;
       }
     },
-    async getData () {
+    async getData() {
       this.pageflag = true;
       // this.pageflag =false
 
-      const { data, state } = await GET('/api/v1/getHistory', {})
-      this.year = data.map((item) => {
-        return item.year;
-      });
-      this.total = data.map((item) => {
-        return item.total;
-      });
+      const { data, state, data2 } = await GET("/api/v1/getHistory", {});
+      if (state == 200) {
+        this.year = data.map((item) => {
+          return item.year;
+        });
+        this.total = data.map((item) => {
+          return item.total;
+        });
+        this.total2 = data2.map((item) => {
+          return item.total;
+        });
+      }
+
       currentGET("big4").then((res) => {
         if (!this.timer) {
           console.log("报警次数", res);
@@ -55,7 +66,7 @@ export default {
         if (res.success) {
           this.countUserNumData = res.data;
           this.$nextTick(() => {
-            this.init(res.data.dateList, res.data.numList, res.data.numList2)
+            this.init(res.data.dateList, res.data.numList, res.data.numList2);
             // this.switper();
           });
         } else {
@@ -68,7 +79,7 @@ export default {
       });
     },
     //轮询
-    switper () {
+    switper() {
       if (this.timer) {
         return;
       }
@@ -90,7 +101,7 @@ export default {
         );
       });
     },
-    init (xData, yData, yData2) {
+    init(xData, yData, yData2) {
       this.option = {
         xAxis: {
           type: "category",
@@ -113,29 +124,54 @@ export default {
             fontWeight: "500",
           },
         },
-        yAxis: {
-          name: "种植面积/亩",
-          type: "value",
-          nameTextStyle: {
-            color: "#7EB7FD",
-            fontWeight: "500",
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: "rgba(31,99,163,.2)",
+        yAxis: [
+          {
+            name: "种植面积/亩",
+            type: "value",
+            nameTextStyle: {
+              color: "#7EB7FD",
+              fontWeight: "500",
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: "rgba(31,99,163,.2)",
+              },
+            },
+            axisLine: {
+              lineStyle: {
+                color: "rgba(31,99,163,.1)",
+              },
+            },
+            axisLabel: {
+              color: "#7EB7FD",
+              fontWeight: "500",
             },
           },
-          axisLine: {
-            lineStyle: {
-              color: "rgba(31,99,163,.1)",
+          {
+            name: "产量",
+            type: "value",
+            nameTextStyle: {
+              color: "#7EB7FD",
+              fontWeight: "500",
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: "rgba(31,99,163,.2)",
+              },
+            },
+            axisLine: {
+              lineStyle: {
+                color: "rgba(31,99,163,.1)",
+              },
+            },
+            axisLabel: {
+              color: "#7EB7FD",
+              fontWeight: "500",
             },
           },
-          axisLabel: {
-            color: "#7EB7FD",
-            fontWeight: "500",
-          },
-        },
+        ],
         tooltip: {
           trigger: "axis",
           backgroundColor: "rgba(0,0,0,.6)",
@@ -159,7 +195,7 @@ export default {
             data: this.total,
             type: "line",
             smooth: true,
-            symbol: 'circle', //去除点
+            symbol: "circle", //去除点
             name: "种植面积/亩",
             color: "rgba(252,144,16,.7)",
             areaStyle: {
@@ -184,51 +220,49 @@ export default {
             },
             label: {
               show: true,
-              position: 'top',
+              position: "top",
               color: "rgba(252,144,16,.7)",
               formatter: (params) => {
-                return `${params.value}亩`
-              }
-            }
-            // markPoint: {
-            //   data: [
-            //     {
-            //       name: "最大值",
-            //       type: "max",
-            //       valueDim: "y",
-            //       symbol: "rect",
-            //       symbolSize: [60, 26],
-            //       symbolOffset: [0, -20],
-            //       itemStyle: {
-            //         color: "rgba(0,0,0,0)",
-            //       },
-            //       label: {
-            //         color: "#FC9010",
-            //         backgroundColor: "rgba(252,144,16,0.1)",
-            //         borderRadius: 6,
-            //         padding: [7, 14],
-            //         borderWidth: 0.5,
-            //         borderColor: "rgba(252,144,16,.5)",
-            //         formatter: "报警1：{c}",
-            //       },
-            //     },
-            //     {
-            //       name: "最大值",
-            //       type: "max",
-            //       valueDim: "y",
-            //       symbol: "circle",
-            //       symbolSize: 6,
-            //       itemStyle: {
-            //         color: "#FC9010",
-            //         shadowColor: "#FC9010",
-            //         shadowBlur: 8,
-            //       },
-            //       label: {
-            //         formatter: "",
-            //       },
-            //     },
-            //   ],
-            // },
+                return `${params.value}亩`;
+              },
+            },
+          },
+          {
+            data: this.total2,
+            type: "line",
+            smooth: true,
+            yAxisIndex: 1,
+            symbol: "circle", //去除点
+            name: "产量/吨",
+            color: "rgba(0,144,16,.7)",
+            areaStyle: {
+              //右，下，左，上
+              color: new graphic.LinearGradient(
+                0,
+                0,
+                0,
+                1,
+                [
+                  {
+                    offset: 0,
+                    color: "rgba(0,144,16,.7)",
+                  },
+                  {
+                    offset: 1,
+                    color: "rgba(0,144,16,.0)",
+                  },
+                ],
+                false
+              ),
+            },
+            label: {
+              show: true,
+              position: "top",
+              color: "rgba(0,144,16,.7)",
+              formatter: (params) => {
+                return `${params.value}吨`;
+              },
+            },
           },
         ],
       };

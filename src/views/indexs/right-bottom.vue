@@ -180,7 +180,7 @@ export default {
             type: "bar",
             smooth: true,
             symbol: "none", //去除点
-            name: "报警1次数",
+            name: "产能/吨",
             color: "rgba(252,144,16,.7)",
             areaStyle: {
               //右，下，左，上
@@ -205,58 +205,19 @@ export default {
             label: {
               show: true,
               position: "top",
-              color: "rgba(252,144,16,.7)",
+              color: "#7EB7FD",
               formatter: (params) => {
                 return `${params.value}吨`;
               },
             },
-            // markPoint: {
-            //   data: [
-            //     {
-            //       name: "最大值",
-            //       type: "max",
-            //       valueDim: "y",
-            //       symbol: "rect",
-            //       symbolSize: [60, 26],
-            //       symbolOffset: [0, -20],
-            //       itemStyle: {
-            //         color: "rgba(0,0,0,0)",
-            //       },
-            //       label: {
-            //         color: "#FC9010",
-            //         backgroundColor: "rgba(252,144,16,0.1)",
-            //         borderRadius: 6,
-            //         padding: [7, 14],
-            //         borderWidth: 0.5,
-            //         borderColor: "rgba(252,144,16,.5)",
-            //         formatter: "报警1：{c}",
-            //       },
-            //     },
-            //     {
-            //       name: "最大值",
-            //       type: "max",
-            //       valueDim: "y",
-            //       symbol: "circle",
-            //       symbolSize: 6,
-            //       itemStyle: {
-            //         color: "#FC9010",
-            //         shadowColor: "#FC9010",
-            //         shadowBlur: 8,
-            //       },
-            //       label: {
-            //         formatter: "",
-            //       },
-            //     },
-            //   ],
-            // },
           },
         ],
         dataZoom: [
           {
             type: "slider",
             xAxisIndex: 0,
-            start: 0,
-            end: 20,
+            start: 20,
+            end: 40,
             show: true,
             // bottom:"-20px",
             // height: 10,

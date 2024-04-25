@@ -13,6 +13,8 @@ import { POST, GET } from "@/api/api";
 export default {
   data () {
     return {
+      data:null,
+      data2:null,
       option: {},
       pageflag: false,
       timer: null,
@@ -40,7 +42,11 @@ export default {
       this.pageflag = true;
       // this.pageflag =false
 
-      const { data,state }= await GET('/api/v1/getSciento',{})
+      const { data, state,data2 } = await GET('/api/v1/getSciento', {})
+      if (state == 200) {
+        this.data = data.map(item=> item.lastestData)
+        this.data2 = data2.map(item=> item.lastestData)
+      }
       currentGET("big4").then((res) => {
         if (!this.timer) {
           console.log("报警次数", res);
@@ -166,11 +172,11 @@ export default {
         },
         series: [
           {
-            data: yData,
+            data: this.data,
             type: "line",
             smooth: true,
             symbol: "none", //去除点
-            name: "报警1次数",
+            name: "土壤温度",
             color: "rgba(252,144,16,.7)",
             areaStyle: {
               //右，下，左，上
@@ -194,12 +200,12 @@ export default {
             },
           },
           {
-            data: yData2,
+            data: this.data2,
             type: "bar",
             yAxisIndex:1,
             smooth: true,
             symbol: "none", //去除点
-            name: "aaa",
+            name: "土壤温度",
             color: "rgba(9,202,243,.7)",
           },
         ],

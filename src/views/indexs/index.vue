@@ -18,7 +18,7 @@
     </div>
     <div class="contetn_center">
       <Bmap class="contetn_center_top" />
-      <!-- <iframe src="assets/html/heatmap.html" ref="iframeDom" style="width: 100%;height: 100%;top: 10%;left: 0%;" /> --> -->
+      <!-- <iframe src="assets/html/heatmap.html" ref="iframeDom" style="width: 100%;height: 100%;top: 10%;left: 0%;" /> -->
       <!-- <CenterMap class="contetn_center_top" /> -->
       <!-- <ItemWrap class="contetn_center-bottom" title="安装计划">
         <CenterBottom />

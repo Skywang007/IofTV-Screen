@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div id="map" style="height: 810px;"></div>
-    <div id="heatmap-buttons">
-      <button @click="()=>showHeatmap(1)">0 - 20 亩</button>
-      <button @click="()=>showHeatmap(2)">20 - 30 亩</button>
-      <button @click="()=>showHeatmap(3)">30 - 40 亩</button>
-      <button @click="()=>showHeatmap(4)">40 - 100 亩</button>
-      <button @click="()=>showHeatmap(5)">100以上</button>
+    <div id="map" style="height: 900px;marginTop:14px"></div>
+    <div class="heatmap-buttons">
+      <button @click="()=>showHeatmap(1)" class="btn">0 - 20 亩</button>
+      <button @click="()=>showHeatmap(2)" class="btn">20 - 30 亩</button>
+      <button @click="()=>showHeatmap(3)" class="btn">30 - 40 亩</button>
+      <button @click="()=>showHeatmap(4)" class="btn">40 - 100 亩</button>
+      <button @click="()=>showHeatmap(5)" class="btn">100以上</button>
     </div>
     <!-- <div id="legend" class="legend" v-if="flag === 0">
       <div class="legend-item" v-for="item in data_legend" :key="item.name">
@@ -75,7 +75,8 @@ export default {
           color: "black",
           backgroundColor: "white",
           border: "1px solid #ccc",
-          padding: "5px"
+          padding: "5px",
+          fontSize: "18px"
         });
         marker.setLabel(label);
 
@@ -175,5 +176,17 @@ export default {
   width: 15px;
   height: 15px;
   margin-right: 5px;
+}
+.heatmap-buttons{
+  margin-top: 20px;
+  margin-left: 10px;
+}
+.btn{
+  margin-right: 10px;
+  width: 90px;
+  height: 30px;
+  background: lightblue;
+  color: #4f4d4d;
+  border-radius: 8px;
 }
 </style>

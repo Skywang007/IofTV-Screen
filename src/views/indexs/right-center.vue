@@ -174,7 +174,7 @@ export default {
             type: "bar",
             smooth: true,
             symbol: "none", //去除点
-            name: "报警1次数",
+            name: "面积/亩",
             color: "rgba(252,144,16,.7)",
             areaStyle: {
               //右，下，左，上
@@ -199,7 +199,7 @@ export default {
             label: {
               show: true,
               position: "top",
-              color: "rgba(252,144,16,.7)",
+              color: "#7EB7FD",
               formatter: (params) => {
                 return `${params.value}亩`;
               },
