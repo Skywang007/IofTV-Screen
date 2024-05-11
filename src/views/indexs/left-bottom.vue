@@ -200,11 +200,7 @@ export default {
             color: "rgba(252,144,16,.7)",
             areaStyle: {
               //右，下，左，上
-              color: new graphic.LinearGradient(
-                0,
-                0,
-                0,
-                1,
+              color: new graphic.LinearGradient(0,0,0,1,
                 [
                   {
                     offset: 0,

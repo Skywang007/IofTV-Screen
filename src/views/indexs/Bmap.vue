@@ -8,12 +8,6 @@
       <button @click="()=>showHeatmap(4)" class="btn">40 - 100 亩</button>
       <button @click="()=>showHeatmap(5)" class="btn">100以上</button>
     </div>
-    <!-- <div id="legend" class="legend" v-if="flag === 0">
-      <div class="legend-item" v-for="item in data_legend" :key="item.name">
-        <div class="color-box" :style="{ backgroundColor: item.color }"></div>
-        <span>{{ item.name }}</span>
-      </div>
-    </div> -->
   </div>
 
 </template>
@@ -49,14 +43,10 @@ export default {
         item.name = `${item.name}-${item.space}亩`
       })
       this.mapData = data;
-
       this.map = new BMap.Map("map");
       this.map.centerAndZoom(new BMap.Point(110.628092, 21.647925), 11);
       this.map.enableScrollWheelZoom();
-
-
       this.mapData.forEach((item) => {
-
         let lat = parseFloat(item.lat);
         let lng = parseFloat(item.lng);
         let point = new BMap.Point(lng, lat);
@@ -88,7 +78,6 @@ export default {
         marker.addEventListener("mouseover", function () {
           label.show();
         });
-
         // 鼠标移开时隐藏工厂名称
         marker.addEventListener("mouseout", function () {
           label.hide();

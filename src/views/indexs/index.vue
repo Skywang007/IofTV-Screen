@@ -3,35 +3,45 @@
     <div class="contetn_left">
       <div class="pagetab">
         <div class="item">实时监测</div>
-
       </div>
       <ItemWrap class="contetn_left-top contetn_lr-item" title="设备总览">
         <LeftTop />
-
       </ItemWrap>
-      <ItemWrap class="contetn_left-center contetn_lr-item" title="种植品种规模分析">
+      <ItemWrap
+        class="contetn_left-center contetn_lr-item"
+        title="种植品种规模分析"
+      >
         <LeftCenter />
       </ItemWrap>
-      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="产业发展历史" style="padding: 0 10px 16px 10px">
+      <ItemWrap
+        class="contetn_left-bottom contetn_lr-item"
+        title="产业发展历史"
+        style="padding: 0 10px 16px 10px"
+      >
         <LeftBottom />
       </ItemWrap>
     </div>
     <div class="contetn_center">
       <Bmap class="contetn_center_top" />
-      <!-- <iframe src="assets/html/heatmap.html" ref="iframeDom" style="width: 100%;height: 100%;top: 10%;left: 0%;" /> -->
-      <!-- <CenterMap class="contetn_center_top" /> -->
-      <!-- <ItemWrap class="contetn_center-bottom" title="安装计划">
-        <CenterBottom />
-      </ItemWrap> -->
     </div>
     <div class="contetn_right">
-      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="种植土壤详情">
+      <ItemWrap
+        class="contetn_left-bottom contetn_lr-item"
+        title="种植土壤详情"
+      >
         <RightTop />
       </ItemWrap>
-      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="全市种植面积统计分析" style="padding: 0 10px 16px 10px">
+      <ItemWrap
+        class="contetn_left-bottom contetn_lr-item"
+        title="全市种植面积统计分析"
+        style="padding: 0 10px 16px 10px"
+      >
         <RightCenter />
       </ItemWrap>
-      <ItemWrap class="contetn_left-bottom contetn_lr-item" title="全市种植产能统计分析 ">
+      <ItemWrap
+        class="contetn_left-bottom contetn_lr-item"
+        title="全市种植产能统计分析 "
+      >
         <RightBottom />
       </ItemWrap>
     </div>
@@ -39,7 +49,7 @@
 </template>
 
 <script>
-import LeftTop from './left-top.vue'
+import LeftTop from "./left-top.vue";
 import LeftCenter from "./left-center.vue";
 import LeftBottom from "./left-bottom.vue";
 import CenterMap from "./center-map.vue";
@@ -59,25 +69,20 @@ export default {
     RightCenter,
     RightBottom,
     CenterBottom,
-    Bmap
+    Bmap,
   },
-  data () {
-    return {
-
-    };
+  data() {
+    return {};
   },
   filters: {
-    numsFilter (msg) {
+    numsFilter(msg) {
       return msg || 0;
     },
   },
-  created () {
-  },
+  created() {},
 
-  mounted () { },
-  methods: {
-
-  },
+  mounted() {},
+  methods: {},
 };
 </script>
 <style lang="scss" scoped>
@@ -119,7 +124,7 @@ export default {
   .contetn_left,
   .contetn_right {
     display: flex;
-    flex:1;
+    flex: 1;
     flex-direction: column;
     justify-content: space-around;
     position: relative;
